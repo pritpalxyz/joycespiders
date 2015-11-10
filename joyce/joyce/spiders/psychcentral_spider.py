@@ -23,17 +23,27 @@ class CancerCompass(scrapy.Spider):
 
 	def get_all_data(self,response):
 
-		author_name_xpath = "//div[@id='posts']/div[1]/div/div//table/tbody/tr[2]/td//a[@class='bigusername']/text()"
-		author_link_xpath = "//div[@id='posts']/div[1]/div/div//table/tbody/tr[2]/td//a[@class='bigusername']/@href"
-		author_posted_date_xpath = "//div[@id='posts']/div[1]/div/div//table/tbody/tr[1]/td[1]/text()"
-		author_text_xpath = "//div[@id='posts']/div[1]/div/div//table/tbody/tr[2]/td[2]/div[2]/text()"
+		post_text = response.css('.alt1').xpath('div[2]/text()').extract()
+		try:
+			post_text = str(post_text[1])
+			post_text = post_text.replace('\r','')
+			post_text = post_text.replace('\n','')
+			post_text = post_text.replace('\t','')
+		except:pass
+
+		date = response.css('.thead').xpath('text()').extract()[2]
+		date = str(date)
+		date = date.replace('\r','')
+		date = date.replace('\n','')
+		date = date.replace('\t','')
+
 
 		item = JoyceItem()
-		item['author'] = response.xpath(author_name_xpath).extract()
-		item['author_link'] = response.xpath(author_link_xpath).extract()
-		item['publish_date'] = response.xpath(author_posted_date_xpath).extract()
+		item['author'] = response.css('.bigusername').xpath('text()').extract_first()
+		item['author_link'] = response.css('.bigusername').xpath('@href').extract_first()
+		item['publish_date'] = date
 		item['url'] = response.url
-		item['post_text'] = response.xpath(author_text_xpath).extract()
+		item['post_text'] = post_text
 		yield item
 
 
