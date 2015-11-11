@@ -2,7 +2,7 @@ import scrapy
 from joyce.items import JoyceItem
 import time
 
-class CancerCompass(scrapy.Spider):
+class LymphomasSpider(scrapy.Spider):
 	name = "lymphomas"
 	allowed_domains = ["lymphomas.org.uk"]
 	start_urls = [

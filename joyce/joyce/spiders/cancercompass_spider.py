@@ -27,8 +27,8 @@ class CancerCompass(scrapy.Spider):
 		author_name = response.xpath(author_name_xpath).extract()
 
 		author_link = response.xpath(author_link_xpath).extract()
-		author_link  = "http://www.cancercompass.com%s"%(author_link[0])
-
+		try:author_link  = "http://www.cancercompass.com%s"%(author_link[0])
+		except:author_link  = "http://www.cancercompass.com%s"%(author_link)
 		publish_date = response.xpath(publish_date_xpath).extract()
 		publish_date =  str(publish_date[1])
 		publish_date = publish_date.replace('on','')
